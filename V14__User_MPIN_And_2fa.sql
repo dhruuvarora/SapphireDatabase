@@ -28,8 +28,10 @@ CREATE TABLE user_2fa
     CONSTRAINT UQ_User_2fa UNIQUE (user_id)
 );
 
+CREATE TYPE user_2fa_method AS ENUM ('disabled', 'sms_otp', 'authenticator');
+
 ALTER TABLE user_2fa 
-ADD COLUMN method VARCHAR(20) NOT NULL DEFAULT 'disabled';
+ADD COLUMN method user_2fa_method NOT NULL DEFAULT 'disabled';
 
 ALTER TABLE user_2fa 
 ALTER COLUMN secret DROP NOT NULL;
@@ -41,10 +43,6 @@ WHERE secret IS NOT NULL;
 UPDATE user_2fa 
 SET method = 'sms_otp' 
 WHERE secret IS NULL AND method = 'disabled';
-
-ALTER TABLE user_2fa 
-ADD CONSTRAINT CHK_User_2fa_Method 
-CHECK (method IN ('disabled', 'sms_otp', 'authenticator'));
 
 CREATE TABLE user_login_history
 (
@@ -85,3 +83,5 @@ CREATE TABLE user_fcm_tokens (
     CONSTRAINT uq_user_fcm_token 
         UNIQUE (user_id, fcm_token)
 );
+
+ALTER TABLE user_password_details DROP CONSTRAINT FK_User_Login_Id;
