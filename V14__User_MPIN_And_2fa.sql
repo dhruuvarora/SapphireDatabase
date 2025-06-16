@@ -13,7 +13,6 @@ CREATE TABLE user_mpin
 
     CONSTRAINT PK_User_MPIN_Id PRIMARY KEY (id),
     CONSTRAINT UQ_User_MPIN_Client_id UNIQUE (client_id),
-    CONSTRAINT FK_User_MPIN_Client FOREIGN KEY (client_id) REFERENCES "user" (id),
     CONSTRAINT FK_User_MPIN_Hash_Algo FOREIGN KEY (hash_algo_id) REFERENCES hashing_algorithm (id)
 );
 
